@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  build:
+    image: mcr.microsoft.com/dotnet/sdk:6.0
+    restart: "no"
+    stdin_open: true
+    profiles:
+      - noautorun
+    volumes:
+      - ./:/source
+    working_dir: /source
+    tmpfs:
+      - /.dotnet
+      - /.local
+      - /.nuget
+    user: "1000:1000"
+    command: dotnet publish --configuration Release
+
+  clean:
+    image: mcr.microsoft.com/dotnet/sdk:6.0
+    restart: "no"
+    stdin_open: true
+    profiles:
+      - noautorun
+    volumes:
+      - ./:/source
+    command: rm -rf /source/Jellyfin.Plugin.Webhook/bin /source/Jellyfin.Plugin.Webhook/obj
